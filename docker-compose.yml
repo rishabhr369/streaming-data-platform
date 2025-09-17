@@ -1,0 +1,212 @@
+name: mini-cluster-simulator
+
+
+services:
+# --------------------------
+# Kafka (KRaft) — 3 nodes
+# --------------------------
+  kafka-1:
+    image: bitnami/kafka:3.7
+    container_name: kafka-1
+    environment:
+      - KAFKA_ENABLE_KRAFT=yes
+      - KAFKA_CFG_NODE_ID=1
+      - KAFKA_CFG_PROCESS_ROLES=broker,controller
+      - KAFKA_CFG_LISTENERS=PLAINTEXT://:9092,CONTROLLER://:9093,EXTERNAL://:9094
+      - KAFKA_CFG_ADVERTISED_LISTENERS=PLAINTEXT://kafka-1:9092,EXTERNAL://host.docker.internal:${KAFKA_1_EXTERNAL}
+      - KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP=CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT,EXTERNAL:PLAINTEXT
+      - KAFKA_CFG_CONTROLLER_LISTENER_NAMES=CONTROLLER
+      - KAFKA_CFG_INTER_BROKER_LISTENER_NAME=PLAINTEXT
+      - KAFKA_CFG_CONTROLLER_QUORUM_VOTERS=1@kafka-1:9093,2@kafka-2:9093,3@kafka-3:9093
+      - KAFKA_KRAFT_CLUSTER_ID=${KAFKA_KRAFT_CLUSTER_ID}
+      - KAFKA_CFG_AUTO_CREATE_TOPICS_ENABLE=false
+    ports:
+      - "${KAFKA_1_EXTERNAL}:9094"
+    volumes:
+      - kafka-data-1:/bitnami/kafka
+    networks: [dnet]
+
+  
+  kafka-2:
+    image: bitnami/kafka:3.7
+    container_name: kafka-2
+    environment:
+      - KAFKA_ENABLE_KRAFT=yes
+      - KAFKA_CFG_NODE_ID=2
+      - KAFKA_CFG_PROCESS_ROLES=broker,controller
+      - KAFKA_CFG_LISTENERS=PLAINTEXT://:9092,CONTROLLER://:9093,EXTERNAL://:9094
+      - KAFKA_CFG_ADVERTISED_LISTENERS=PLAINTEXT://kafka-2:9092,EXTERNAL://host.docker.internal:${KAFKA_2_EXTERNAL}
+      - KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP=CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT,EXTERNAL:PLAINTEXT
+      - KAFKA_CFG_CONTROLLER_LISTENER_NAMES=CONTROLLER
+      - KAFKA_CFG_INTER_BROKER_LISTENER_NAME=PLAINTEXT
+      - KAFKA_CFG_CONTROLLER_QUORUM_VOTERS=1@kafka-1:9093,2@kafka-2:9093,3@kafka-3:9093
+      - KAFKA_KRAFT_CLUSTER_ID=${KAFKA_KRAFT_CLUSTER_ID}
+      - KAFKA_CFG_AUTO_CREATE_TOPICS_ENABLE=false
+    ports:
+      - "${KAFKA_2_EXTERNAL}:9094"
+    volumes:
+      - kafka-data-2:/bitnami/kafka
+    networks: [dnet]
+
+
+  kafka-3:
+    image: bitnami/kafka:3.7
+    container_name: kafka-3
+    environment:
+      - KAFKA_ENABLE_KRAFT=yes
+      - KAFKA_CFG_NODE_ID=3
+      - KAFKA_CFG_PROCESS_ROLES=broker,controller
+      - KAFKA_CFG_LISTENERS=PLAINTEXT://:9092,CONTROLLER://:9093,EXTERNAL://:9094
+      - KAFKA_CFG_ADVERTISED_LISTENERS=PLAINTEXT://kafka-3:9092,EXTERNAL://host.docker.internal:${KAFKA_3_EXTERNAL}
+      - KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP=CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT,EXTERNAL:PLAINTEXT
+      - KAFKA_CFG_CONTROLLER_LISTENER_NAMES=CONTROLLER
+      - KAFKA_CFG_INTER_BROKER_LISTENER_NAME=PLAINTEXT
+      - KAFKA_CFG_CONTROLLER_QUORUM_VOTERS=1@kafka-1:9093,2@kafka-2:9093,3@kafka-3:9093
+      - KAFKA_KRAFT_CLUSTER_ID=${KAFKA_KRAFT_CLUSTER_ID}
+      - KAFKA_CFG_AUTO_CREATE_TOPICS_ENABLE=false
+    ports:
+      - "${KAFKA_3_EXTERNAL}:9094"
+    volumes:
+      - kafka-data-3:/bitnami/kafka
+    networks: [dnet]
+
+
+  # Create topics once brokers are up
+  kafka-init:
+    image: bitnami/kafka:3.7
+    container_name: kafka-init
+    depends_on:
+      - kafka-1
+      - kafka-2
+      - kafka-3
+    environment:
+      - KAFKA_PARTITIONS=${KAFKA_PARTITIONS}
+      - KAFKA_REPLICATION_FACTOR=${KAFKA_REPLICATION_FACTOR}
+      - KAFKA_MIN_INSYNC=${KAFKA_MIN_INSYNC}
+    entrypoint: ["/bin/bash","-lc"]
+    command: |
+      "bash /scripts/create_topics.sh"
+    volumes:
+      - ./scripts:/scripts
+    networks: [dnet]
+
+
+  # Kafka UI (browse topics/partitions/messages)
+  kafka-ui:
+    image: provectuslabs/kafka-ui:latest
+    container_name: kafka-ui
+    depends_on:
+      - kafka-1
+      - kafka-2
+      - kafka-3
+    environment:
+      - KAFKA_CLUSTERS_0_NAME=local
+      - KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS=kafka-1:9092,kafka-2:9092,kafka-3:9092
+    ports:
+      - "8080:8080"
+    networks: [dnet]
+
+# --------------------------
+
+  spark-master:
+    build:
+      context: .
+      dockerfile: spark/Dockerfile
+    container_name: spark-master
+    environment:
+      - SPARK_MASTER_HOST=0.0.0.0
+      - SPARK_MASTER_PORT=7077
+      - SPARK_MASTER_WEBUI_PORT=8080
+    command: ["/opt/spark/bin/spark-class", "org.apache.spark.deploy.master.Master", "--host", "0.0.0.0", "--port", "7077", "--webui-port", "8080"]
+    ports:
+      - "7077:7077" # master RPC
+      - "8081:8080" # master UI mapped to host 8081
+    volumes:
+      - ./data/datalake:/datalake
+      - ./data/checkpoints:/checkpoints
+      - ./spark/jobs:/opt/spark-apps
+      - ./config.yml:/opt/config.yml
+      - ./config_loader.py:/opt/config_loader.py
+    networks: [dnet]
+
+  spark-worker-1:
+    build:
+      context: .
+      dockerfile: spark/Dockerfile
+    container_name: spark-worker-1
+    environment:
+      - SPARK_WORKER_MEMORY=${SPARK_WORKER_MEMORY}
+      - SPARK_WORKER_CORES=${SPARK_WORKER_CORES}
+    command: ["/opt/spark/bin/spark-class", "org.apache.spark.deploy.worker.Worker", "spark://spark-master:7077"]
+    depends_on:
+      - spark-master
+    volumes:
+      - ./data/datalake:/datalake
+      - ./data/checkpoints:/checkpoints
+    networks: [dnet]
+
+
+  spark-worker-2:
+    build:
+      context: .
+      dockerfile: spark/Dockerfile
+    container_name: spark-worker-2
+    environment:
+      - SPARK_WORKER_MEMORY=${SPARK_WORKER_MEMORY}
+      - SPARK_WORKER_CORES=${SPARK_WORKER_CORES}
+    command: ["/opt/spark/bin/spark-class", "org.apache.spark.deploy.worker.Worker", "spark://spark-master:7077"]
+    depends_on:
+      - spark-master
+    volumes:
+      - ./data/datalake:/datalake
+      - ./data/checkpoints:/checkpoints
+    networks: [dnet]
+
+
+# Spark job submitter (runs the Structured Streaming ETL)
+  spark-app:
+    build:
+      context: .
+      dockerfile: spark/Dockerfile
+    container_name: spark-app
+    depends_on:
+      - spark-master
+      - spark-worker-1
+      - spark-worker-2
+      - kafka-init
+    entrypoint: ["/bin/bash","-lc"]
+    command: |
+      "bash /opt/submit.sh"
+    volumes:
+      - ./scripts/submit.sh:/opt/submit.sh
+      - ./spark/jobs:/opt/jobs
+      - ./data/datalake:/datalake
+      - ./data/checkpoints:/checkpoints
+      - ./config.yml:/opt/config.yml
+      - ./config_loader.py:/opt/config_loader.py
+    networks: [dnet]
+
+  generator:
+    build:
+      context: .
+      dockerfile: generator/Dockerfile
+    container_name: data-generator
+    depends_on:
+      - kafka-init
+    environment:
+      - BOOTSTRAP_SERVERS=kafka-1:9092,kafka-2:9092,kafka-3:9092
+      - EPS_CLICK=${EVENTS_PER_SEC_CLICK:-50}
+      - EPS_IOT=${EVENTS_PER_SEC_IOT:-30}
+      - PARTITIONS=${KAFKA_PARTITIONS}
+    networks: [dnet]
+
+volumes:
+  kafka-data-1:
+  kafka-data-2:
+  kafka-data-3:
+  # datalake and checkpoints are now bind mounts to ./data/ directory
+
+
+networks:
+  dnet:
+    driver: bridge

@@ -1,0 +1,50 @@
+# Mini Cluster Configuration
+# This file contains all configuration parameters for the mini cluster setup
+
+kafka:
+  # Kafka Cluster Configuration
+  kraft_cluster_id: "gQA8uK8rQjK-FAqvB8RZ2Q"  # Keep the SAME cluster id across brokers
+  partitions: 4
+  replication_factor: 2
+  min_insync_replicas: 1
+  
+  # External ports for host access
+  external_ports:
+    broker_1: 19092
+    broker_2: 29092
+    broker_3: 39092
+  
+  # Bootstrap servers for internal communication
+  bootstrap_servers: "kafka-1:9092,kafka-2:9092,kafka-3:9092"
+
+spark:
+  # Spark Worker Configuration
+  worker_memory: "2g"
+  worker_cores: 2
+  
+  # Spark Master Configuration
+  master_url: "spark://spark-master:7077"
+
+data_generator:
+  # Data generation rates (events per second)
+  events_per_second:
+    clickstream: 30
+    iot: 20
+  
+  # Bootstrap servers for producer
+  bootstrap_servers: "kafka-1:9092,kafka-2:9092,kafka-3:9092"
+
+storage:
+  # Data lake and checkpoint paths
+  datalake_root: "/datalake"
+  checkpoint_root: "/checkpoints"
+
+topics:
+  # Topic names
+  clickstream: "clickstream"
+  iot: "iot"
+
+ui:
+  # UI service ports
+  kafka_ui_port: 8080
+  spark_master_ui_port: 8081
