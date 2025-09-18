@@ -135,7 +135,7 @@ flowchart TB
     class DL,CP,CT_TABLE,IOT_TABLE,AGG_TABLE dataNode
     class JN monitorNode
     class CONFIG,ENV configNode
-'''
+```
 
 ## 🔧 Component Details
 
