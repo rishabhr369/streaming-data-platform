@@ -4,6 +4,14 @@
 
 This document provides a comprehensive overview of the Mini Cluster Setup architecture, illustrating the data flow, component interactions, and technology stack.
 
+## 📑 Table of Contents
+- [📊 Architecture Diagram](#-architecture-diagram) - Main system overview with Mermaid diagrams
+- [🔧 Component Details](#-component-details) - Detailed component specifications
+- [📈 Data Flow](#-data-flow) - Sequence diagrams showing temporal flow
+- [🛠️ Technology Stack](#️-technology-stack) - Complete technology breakdown
+- [🚀 Key Features](#-key-features) - Performance, fault tolerance, and scalability
+- [🔍 Network Topology](#-network-topology) - Docker network and connectivity
+
 ## 📊 Architecture Diagram
 
 ```mermaid
@@ -241,7 +249,7 @@ graph LR
     subgraph "Docker Network (dnet)"
         subgraph "Kafka Services"
             K1[kafka-1:9092]
-            K2[kafka-2:9092]3
+            K2[kafka-2:9092]
             K3[kafka-3:9092]
             KUI[kafka-ui:8080]
         end
