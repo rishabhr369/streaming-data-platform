@@ -15,7 +15,7 @@ This document provides comprehensive information about the Streaming Data Platfo
 - [File Structure](#-file-structure)
 - [Advanced Features](#-advanced-features)
 
-## 📋 System Requirements
+## System Requirements
 
 ### Dependencies
 The system requires:
@@ -132,7 +132,7 @@ The streaming ETL pipeline processes three data streams:
    - Format: Parquet with date partitioning
    - Schema: `device_id`, `site`, `temp_c`, `humidity`, `battery`, `signal_strength`, `ts`
 
-## 🛠️ Available Commands
+## Available Commands
 
 | Command | Description |
 |---------|-------------|
@@ -208,7 +208,7 @@ make reset
 
 > **Note**: With bind mounts, your data persists in `./data/` even after `make clean`. Use the specific data cleanup commands above for data management.
 
-## 🔧 Configuration Changes
+## Configuration Changes
 
 ### Changing Kafka Settings
 
@@ -252,7 +252,7 @@ To modify Kafka configuration (partitions, replication factor, etc.):
    make down && make up  # Restart data generator
    ```
 
-## 🔍 Troubleshooting
+## Troubleshooting
 
 ### Quick Fixes
 
