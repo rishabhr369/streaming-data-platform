@@ -1,17 +1,17 @@
-# 🚀 Streaming Data Platform
+# Streaming Data Platform
 
 A **production-ready containerized data engineering platform** featuring Apache Kafka, Apache Spark, and high-performance data generation for real-time stream processing, analytics, and data science experimentation.
 
-## 🎯 What Makes This Special
+## What Makes This Special
 
-- 🔥 **High-Performance Data Generator** with multi-threading and 4x throughput optimization
-- 📊 **Built-in Data Analytics Platform** with Jupyter notebooks and comprehensive analysis
-- 💾 **Production Data Lake** with structured data processing and partitioning
-- 🛠️ **YAML-Based Configuration** for easy management across environments
-- 🔄 **Real-time Stream Processing** with fault tolerance and checkpointing
-- 📈 **Live Data Analytics** with actual processed data ready for exploration
+-  **High-Performance Data Generator** with multi-threading and 4x throughput optimization
+-  **Built-in Data Analytics Platform** with Jupyter notebooks and comprehensive analysis
+-  **Production Data Lake** with structured data processing and partitioning
+-  **YAML-Based Configuration** for easy management across environments
+-  **Real-time Stream Processing** with fault tolerance and checkpointing
+-  **Live Data Analytics** with actual processed data ready for exploration
 
-## ⚡ Quick Start
+## Quick Start
 
 ```bash
 # 1. Setup configuration
@@ -25,13 +25,13 @@ jupyter notebook datalake_analysis.ipynb
 ```
 
 **Access Points:**
-- 🖥️ Kafka UI: http://localhost:8080
-- ⚡ Spark UI: http://localhost:8081  
-- 📊 Data Analytics: `jupyter notebook datalake_analysis.ipynb`
+-  Kafka UI: http://localhost:8080
+-  Spark UI: http://localhost:8081  
+-  Data Analytics: `jupyter notebook datalake_analysis.ipynb`
 
-## 🏗️ Architecture Overview
+## Architecture Overview
 
-📊 **[View Complete System Architecture →](./architecture.md)**
+**[View Complete System Architecture →](./architecture.md)**
 
 The platform features interactive Mermaid diagrams showing:
 - Component interactions and data flow
@@ -45,7 +45,7 @@ Multi-threaded   3-node KRaft   Streaming   Parquet   Jupyter
 200+ events/sec  High-Avail.    Real-time   Partitioned  Interactive
 ```
 
-## 🛠️ Key Features
+## Key Features
 
 ### **High-Performance Data Generation**
 - Multi-threaded producer with 200+ events/sec throughput
@@ -63,22 +63,15 @@ Multi-threaded   3-node KRaft   Streaming   Parquet   Jupyter
 - Environment variable auto-generation
 - Fallback systems and validation
 
-## 📖 Documentation
+## Documentation
 
-- 📊 **[Architecture Diagrams](./architecture.md)** - Complete system design with Mermaid diagrams
-- 📚 **[Detailed Documentation](./DETAILED_README.md)** - Comprehensive setup, configuration, and troubleshooting
-- ⚙️ **[Configuration Guide](./DETAILED_README.md#configuration-changes)** - Advanced configuration options
-- 🔧 **[Troubleshooting](./DETAILED_README.md#troubleshooting)** - Common issues and solutions
+-  **[Architecture Diagrams](./architecture.md)** - Complete system design with Mermaid diagrams
+-  **[Detailed Documentation](./DETAILED_README.md)** - Comprehensive setup, configuration, and troubleshooting
+-  **[Configuration Guide](./DETAILED_README.md#configuration-changes)** - Advanced configuration options
+-  **[Troubleshooting](./DETAILED_README.md#troubleshooting)** - Common issues and solutions
 
-## 🎯 Perfect For
 
-- **Data Engineers** learning stream processing technologies
-- **Developers** prototyping real-time analytics solutions  
-- **Students** studying modern data architecture patterns
-- **Teams** needing reference implementations for production deployments
-- **Organizations** evaluating Kafka and Spark infrastructure
-
-## 🚀 Technology Stack
+## Technology Stack
 
 | Component | Technology | Purpose |
 |-----------|------------|---------|
@@ -89,7 +82,7 @@ Multi-threaded   3-node KRaft   Streaming   Parquet   Jupyter
 | **Orchestration** | Docker Compose | Service management |
 | **Configuration** | YAML, Python | Centralized configuration |
 
-## 📊 Quick Commands
+## Quick Commands
 
 ```bash
 make setup          # Interactive setup with dependencies
@@ -100,17 +93,13 @@ make clean-data      # Clean all data (interactive)
 make down            # Stop services
 ```
 
-## 🤝 Contributing
+## Contributing
 
 We welcome contributions! Please see our [detailed documentation](./DETAILED_README.md) for:
 - Development setup and guidelines
 - Architecture deep-dive and component details
 - Configuration management and customization
 - Troubleshooting and debugging guides
-
-## 📄 License
-
-This project is open source and available under the [MIT License](LICENSE).
 
 ---
 

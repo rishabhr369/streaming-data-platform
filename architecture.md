@@ -1,18 +1,18 @@
-# 🏗️ Mini Cluster Setup - System Architecture
+# Mini Cluster Setup - System Architecture
 
 ## High-Level System Design
 
 This document provides a comprehensive overview of the Mini Cluster Setup architecture, illustrating the data flow, component interactions, and technology stack.
 
-## 📑 Table of Contents
-- [📊 Architecture Diagram](#-architecture-diagram) - Main system overview with Mermaid diagrams
-- [🔧 Component Details](#-component-details) - Detailed component specifications
-- [📈 Data Flow](#-data-flow) - Sequence diagrams showing temporal flow
-- [🛠️ Technology Stack](#️-technology-stack) - Complete technology breakdown
-- [🚀 Key Features](#-key-features) - Performance, fault tolerance, and scalability
-- [🔍 Network Topology](#-network-topology) - Docker network and connectivity
+## Table of Contents
+- [Architecture Diagram](#-architecture-diagram) - Main system overview with Mermaid diagrams
+- [Component Details](#-component-details) - Detailed component specifications
+- [Data Flow](#-data-flow) - Sequence diagrams showing temporal flow
+- [Technology Stack](#️-technology-stack) - Complete technology breakdown
+- [Key Features](#-key-features) - Performance, fault tolerance, and scalability
+- [Network Topology](#-network-topology) - Docker network and connectivity
 
-## 📊 Architecture Diagram
+## Architecture Diagram
 
 ```mermaid
 flowchart TB
@@ -173,7 +173,7 @@ flowchart TB
 - **Auto-Generation**: Converts YAML to environment variables
 - **Fallback System**: Graceful degradation to environment variables
 
-## 📈 Data Flow
+## Data Flow
 
 ```mermaid
 sequenceDiagram
@@ -199,7 +199,7 @@ sequenceDiagram
     Note over JN: Interactive Exploration<br/>Visualizations
 ```
 
-## 🛠️ Technology Stack
+## Technology Stack
 
 | **Layer** | **Technology** | **Purpose** |
 |-----------|----------------|-------------|
@@ -212,7 +212,7 @@ sequenceDiagram
 | **Analytics** | Jupyter, Pandas, Matplotlib | Data analysis |
 | **Data Generation** | Python, Faker, Confluent Kafka | Synthetic data production |
 
-## 🚀 Key Features
+## Key Features
 
 ### **High Performance**
 - Multi-threaded data generation with batch processing
@@ -234,7 +234,7 @@ sequenceDiagram
 - Comprehensive monitoring and alerting
 - Data cleanup and management utilities
 
-## 🔍 Network Topology
+## Network Topology
 
 ```mermaid
 graph LR
