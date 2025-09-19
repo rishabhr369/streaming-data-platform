@@ -1,19 +1,19 @@
-# 📚 Streaming Data Platform - Detailed Documentation
+# Streaming Data Platform - Detailed Documentation
 
 This document provides comprehensive information about the Streaming Data Platform, including detailed setup instructions, configuration management, troubleshooting guides, and advanced features.
 
-## 📑 Table of Contents
+## Table of Contents
 
-- [📋 System Requirements](#-system-requirements)
-- [⚙️ Configuration Management](#️-configuration-management)
-- [🏗️ Architecture Deep Dive](#️-architecture-deep-dive)
-- [🛠️ Available Commands](#️-available-commands)
-- [📊 Monitoring & Analytics](#-monitoring--analytics)
-- [🧹 Data Management](#-data-management)
-- [🔧 Configuration Changes](#-configuration-changes)
-- [🔍 Troubleshooting](#-troubleshooting)
-- [📁 File Structure](#-file-structure)
-- [🚀 Advanced Features](#-advanced-features)
+- [System Requirements](#-system-requirements)
+- [Configuration Management](#️-configuration-management)
+- [Architecture Deep Dive](#️-architecture-deep-dive)
+- [Available Commands](#️-available-commands)
+- [Monitoring & Analytics](#-monitoring--analytics)
+- [Data Management](#-data-management)
+- [Configuration Changes](#-configuration-changes)
+- [Troubleshooting](#-troubleshooting)
+- [File Structure](#-file-structure)
+- [Advanced Features](#-advanced-features)
 
 ## 📋 System Requirements
 
@@ -28,7 +28,7 @@ The system requires:
 - **Storage**: 10GB+ for data lake and checkpoints
 - **Network**: Broadband connection for Docker image downloads
 
-## ⚙️ Configuration Management
+## Configuration Management
 
 ### YAML-Based Configuration
 
@@ -78,7 +78,7 @@ ui:
 2. **Run `make config`** to generate the `.env` file from your YAML configuration
 3. **Run `make up`** to apply the changes (restarts containers if already running)
 
-## 🏗️ Architecture Deep Dive
+## Architecture Deep Dive
 
 ### Services Overview
 
@@ -86,32 +86,32 @@ ui:
 - **Kafka UI**: Web interface at http://localhost:8080
 - **Spark Master**: Web UI at http://localhost:8081
 - **Spark Workers**: 2 worker nodes with custom Apache Spark images
-- **🔥 High-Performance Data Generator**: Multi-threaded producer (200+ events/sec)
+- **High-Performance Data Generator**: Multi-threaded producer (200+ events/sec)
 - **Spark ETL**: Real-time streaming job with comprehensive processing
-- **📊 Data Analytics Platform**: Jupyter notebook with live data analysis
+- **Data Analytics Platform**: Jupyter notebook with live data analysis
 
 ### Data Flow
 
-1. **🔥 High-Performance Data Generator** produces events at scale using multi-threading
+1. **High-Performance Data Generator** produces events at scale using multi-threading
    - Batch processing with LZ4 compression
    - Performance monitoring with real-time metrics
    - Graceful shutdown with message flushing
 2. **Spark Streaming ETL** consumes and processes events in real-time
 3. **Processed data** stored in Parquet format with date partitioning
 4. **Aggregated analytics** creates windowed analytics (page views per minute)
-5. **📊 Data Analytics Platform** provides comprehensive data exploration
+5. **Data Analytics Platform** provides comprehensive data exploration
 6. **Monitoring** via Kafka UI, Spark UI, and performance metrics
 
 ### Volume Management & Data Persistence
 
 The cluster uses **bind mounts** for production-grade data persistence:
-- **📊 Production Data Lake**: Stores processed data in structured format
+- **Production Data Lake**: Stores processed data in structured format
   - `./data/datalake/tables/clickstream/` - User interaction data (Parquet)
   - `./data/datalake/tables/iot/` - IoT sensor data (Parquet)
   - `./data/datalake/tables/clickstream_agg/` - Real-time aggregations
-- **🔄 Checkpoint Management**: Streaming fault tolerance and state management
-- **📁 Direct Access**: Data visible in your IDE at `./data/` for analysis
-- **🛠️ Data Management**: Comprehensive cleanup and statistics commands
+- **Checkpoint Management**: Streaming fault tolerance and state management
+- **Direct Access**: Data visible in your IDE at `./data/` for analysis
+- **Data Management**: Comprehensive cleanup and statistics commands
 
 ### Data Processing
 
@@ -151,25 +151,25 @@ The streaming ETL pipeline processes three data streams:
 | `make clean-datalake` | Clean only processed data (keep checkpoints) |
 | `make clean-checkpoints` | Clean only streaming state (keep data) |
 
-## 📊 Monitoring & Analytics
+## Monitoring & Analytics
 
 - **Kafka UI**: http://localhost:8080 - Browse topics, partitions, messages
 - **Spark Master UI**: http://localhost:8081 - Monitor Spark jobs and workers  
-- **📊 Data Analytics**: `jupyter notebook datalake_analysis.ipynb` - Comprehensive data analysis
-- **📈 Performance Metrics**: Real-time throughput monitoring in data generator logs
-- **📋 Data Statistics**: `make data-stats` - File counts, sizes, and table breakdown
-- **🔍 Logs**: `make logs` - View all service logs with performance metrics
+- **Data Analytics**: `jupyter notebook datalake_analysis.ipynb` - Comprehensive data analysis
+- **Performance Metrics**: Real-time throughput monitoring in data generator logs
+- **Data Statistics**: `make data-stats` - File counts, sizes, and table breakdown
+- **Logs**: `make logs` - View all service logs with performance metrics
 
 ### Data Analytics Platform
 
 The project includes a comprehensive **Jupyter notebook** (`datalake_analysis.ipynb`) for data exploration:
 
 #### Available Analysis
-- **📈 Data Volume Overview**: File counts, sizes, and partitioning analysis
-- **🌐 Clickstream Analytics**: User behavior patterns and page view analytics
-- **🌡️ IoT Sensor Analysis**: Temperature, humidity, and device health monitoring
-- **📊 Time Series Analysis**: Trend analysis and pattern recognition
-- **🔍 Interactive Exploration**: Pandas, Matplotlib, and Seaborn visualizations
+- **Data Volume Overview**: File counts, sizes, and partitioning analysis
+- **Clickstream Analytics**: User behavior patterns and page view analytics
+- **IoT Sensor Analysis**: Temperature, humidity, and device health monitoring
+- **Time Series Analysis**: Trend analysis and pattern recognition
+- **Interactive Exploration**: Pandas, Matplotlib, and Seaborn visualizations
 
 #### Key Metrics Available
 - **Data Processing**: Continuously processed clickstream and IoT data
@@ -177,7 +177,7 @@ The project includes a comprehensive **Jupyter notebook** (`datalake_analysis.ip
 - **Data Types**: Clickstream events, IoT sensor readings, and aggregated analytics
 - **Real-time Processing**: Continuous stream processing with checkpointing
 
-## 🧹 Data Management & Cleanup
+## Data Management & Cleanup
 
 ### Production Data Management
 ```bash
@@ -282,7 +282,7 @@ make down && make up               # Full restart
 - Docker & Docker Compose
 - Python 3.x with PyYAML (auto-installed via `make setup`)
 
-## 📁 File Structure
+## File Structure
 
 ```
 .
@@ -293,57 +293,44 @@ make down && make up               # Full restart
 ├── Makefile                # Build automation with volume init
 ├── generator/
 │   ├── Dockerfile          # Enhanced with PyYAML support
-│   └── data_gen.py         # 🔥 High-performance multi-threaded generator
-├── datalake_analysis.ipynb # 📊 Comprehensive data analysis notebook
-├── scripts/                # 🆕 Unified scripts directory
+│   └── data_gen.py         # High-performance multi-threaded generator
+├── datalake_analysis.ipynb # Comprehensive data analysis notebook
+├── scripts/                # Unified scripts directory
 │   ├── setup.sh           # Setup script (moved here)
 │   ├── create_topics.sh    # Topic creation script (moved here)
 │   ├── submit.sh          # Spark job submission script (moved here)
-│   └── init-volumes.sh    # 🆕 Volume initialization script
-├── data/                   # 📁 Production data persistence
+│   └── init-volumes.sh    # Volume initialization script
+├── data/                   # Production data persistence
 │   ├── datalake/          # Processed data files (Parquet format)
 │   └── checkpoints/       # Streaming state and checkpoint files
-├── architecture.md         # 🏗️ System architecture with Mermaid diagrams
+├── architecture.md         # System architecture with Mermaid diagrams
 └── spark/
     ├── Dockerfile          # Apache Spark image (updated)
     └── jobs/
         └── streaming_etl.py # Spark ETL job (watermark fixed)
 ```
 
-## 🚀 Advanced Features
+## Advanced Features
 
-### 🔥 High-Performance Data Generation
+### High-Performance Data Generation
 - **Multi-threaded Production**: 4 concurrent threads for maximum throughput
 - **Batch Processing**: 50-event batches with LZ4 compression
 - **Performance Monitoring**: Real-time metrics every 10 seconds
 - **Target Rates**: 200+ clickstream events/sec, 150+ IoT events/sec
 - **Graceful Shutdown**: Signal handling with proper message flushing
 
-### 📊 Production Data Analytics
+### Production Data Analytics
 - **Live Data Lake**: Structured data processing ready for analysis
 - **Multiple Data Streams**: Clickstream, IoT sensors, and aggregated analytics
 - **Interactive Analysis**: Jupyter notebooks with rich visualizations
 - **Time Series Data**: Multi-day historical data with date partitioning
 - **Real-time Processing**: Continuous stream processing with fault tolerance
 
-### 🛠️ Enterprise-Grade Configuration
+### Enterprise-Grade Configuration
 - **YAML-First**: Central configuration with dot-notation access
 - **Fallback Systems**: Graceful degradation to environment variables
 - **Auto-Generation**: Converts YAML to Docker Compose environment
 - **Type Safety**: Configuration validation and error handling
 
-### Recent Improvements
-
-- **🚀 High-Performance Data Generator**: Multi-threaded with 4x throughput boost
-- **📊 Data Analytics Platform**: Jupyter notebook with comprehensive analysis tools
-- **📦 Production Data Storage**: Structured data processing and storage
-- **🔧 Enhanced Configuration**: Advanced YAML system with fallback mechanisms
-- **🛠️ Advanced Data Management**: Cleanup utilities and statistics commands
-- **📈 Performance Monitoring**: Real-time metrics and delivery tracking
-- **🏗️ Production Architecture**: Custom containers with optimized builds
-
-The configuration system supports both simple environment variable usage and sophisticated YAML-based configuration for production deployments, making it suitable for both development and production use cases.
-
----
 
 This comprehensive documentation provides everything needed to understand, deploy, configure, and troubleshoot the Streaming Data Platform. For visual architecture overview, see [architecture.md](./architecture.md).
